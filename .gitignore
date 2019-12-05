@@ -1,0 +1,6 @@
+# 忽略小说下载路径
+/download
+# 忽略模块
+/node_modules/
+# 忽略vscode配置
+.vscode/
