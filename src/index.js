@@ -20,7 +20,7 @@ try{
  * 现在支持笔趣阁和新笔趣阁2中编码的网站
  */
 // https://www.52bqg.com/book_117179/
-// http://www.xbiquge.la/14/14682/
+// https://www.xsbiquge.com/1_1203/
 async function start(url) {
   console.log(`开始解析[ ${ url } ]章节列表...`);
   const bookHtml = await get(url);
@@ -72,10 +72,15 @@ function parseList(html) {
   const $ = cheerio.load(html);
   const bookName = $("h1", "#info").text();
   const list = [];
+  // 一般小说中的分页正则
+  const titleReg = /$\s*第.+章/
   $("a", "#list").each((index, el) => {
     el = $(el);
     const href = el.attr("href");
-    const title = el.text();
+    let title = el.text();
+    if(!titleReg.test(title)){
+        title = `第${ index + 1  }章 ${ title }`;
+    }
     list.push({
       title,
       href
@@ -112,7 +117,8 @@ function wait() {
     setTimeout(resolve, Math.min(waitTime, 0));
   });
 }
-start('https://www.biquge.tv/6_6795/')
+// https://www.biquge.biz/22_22126/ 暗黑系暖婚
+start('https://www.xsbiquge.com/1_1203/')
   .then(res => {
     if(res !== false){
         console.log('下载成功！');
