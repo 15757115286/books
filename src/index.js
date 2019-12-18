@@ -73,7 +73,7 @@ function parseList(html) {
   const bookName = $("h1", "#info").text();
   const list = [];
   // 一般小说中的分页正则
-  const titleReg = /$\s*第.+章/
+  const titleReg = /\s*第.+章/
   $("a", "#list").each((index, el) => {
     el = $(el);
     const href = el.attr("href");
@@ -95,11 +95,20 @@ function parseList(html) {
 // 解析章节
 async function parseChapter(baseUrl, chapter) {
   const { title, href } = chapter;
-  const urlSegment = [...baseUrl.split('/'), ...href.split('/')].filter(_ => _);
-  const url = urlSegment[0] + '//' + [...new Set(urlSegment.splice(1))].join('/');
-  const result = await get(url);
+  let finalUrl = '';
+  if(/^https?:\/\//.test(href)){
+    finalUrl = href;
+  }else{
+    const urlSegment = [...baseUrl.split('/'), ...href.split('/')].filter(_ => _);
+    finalUrl = urlSegment[0] + '//' + [...new Set(urlSegment.splice(1))].join('/');
+  }
+  const result = await get(finalUrl);
   const $ = cheerio.load(result);
-  const textNodes = $("#content")[0].childNodes.filter(node => node.type === 'text');
+  let content = $("#content");
+  if(content.length == 0){
+    content = $('.content');
+  }
+  const textNodes = content[0].childNodes.filter(node => node.type === 'text');
   const text = textNodes.map(node => node.data.replace(/\n/g,'')).filter(_ => _).join('\n\n');
   return '\n' + title + '\n\n' + filterAds(text);
 }
@@ -118,7 +127,7 @@ function wait() {
   });
 }
 // https://www.biquge.biz/22_22126/ 暗黑系暖婚
-start('https://www.xsbiquge.com/1_1203/')
+start('https://www.biquger.com/biquge/26134/')
   .then(res => {
     if(res !== false){
         console.log('下载成功！');
