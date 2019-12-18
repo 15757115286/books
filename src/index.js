@@ -17,7 +17,11 @@ try{
  *  @author xuweitao 2019年12月5日12:33:05
  *
  * 爬取笔趣阁小说内容，内容仅供学习使用
- * 现在支持笔趣阁和新笔趣阁2中编码的网站
+ * 目前支持笔趣阁和新笔趣阁2种编码的网站
+ * 
+ * TODO:
+ * 将小说网站解析单出抽取出来，支持多种小说网址爬取
+ * https://www.qianqianxsw.com/  千千看书
  */
 // https://www.52bqg.com/book_117179/
 // https://www.xsbiquge.com/1_1203/
